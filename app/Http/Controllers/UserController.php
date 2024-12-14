@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\DTO\UserDTO;
 use App\Http\Requests\AuthFormRequest;
-use App\Http\Requests\UserFormRequest;
+use App\Http\Requests\UserCreateFormRequest;
+use App\Http\Requests\UserUpdateFormRequest;
 use App\Repository\Interfaces\UserRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -37,7 +38,7 @@ class UserController extends Controller
         return response()->json(['user' => $user], Response::HTTP_OK);
     }
 
-    public function store(AuthFormRequest $request): JsonResponse
+    public function store(UserCreateFormRequest $request): JsonResponse
     {
         $userDTO = new UserDTO($request->all());
 
@@ -48,7 +49,7 @@ class UserController extends Controller
         return response()->json(['error' => 'Falha ao criar usuário!'], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
-    public function update(UserFormRequest $request): JsonResponse
+    public function update(UserUpdateFormRequest $request): JsonResponse
     {
         $userDTO = new UserDTO($request->all());
         $userDTO->id = $request->id;

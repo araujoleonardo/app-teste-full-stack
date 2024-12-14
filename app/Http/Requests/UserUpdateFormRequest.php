@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Http\Rules\ValidaCpf;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserFormRequest extends FormRequest
+class UserUpdateFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,6 +27,7 @@ class UserFormRequest extends FormRequest
             'name' => 'required|string|min:8',
             'email' => 'required|string|email',
             'password' => 'nullable|string|min:6|confirmed|required_if:change,true',
+            'cpf' => ['required', new ValidaCpf],
         ];
     }
 
@@ -43,6 +45,8 @@ class UserFormRequest extends FormRequest
             'password.required_if' => 'Senha é obrigatória!',
             'password.min' => 'Senha deve ter pelo menos 6 caracteres!',
             'password.confirmed' => 'A confirmação da senha não confere!',
+
+            'cpf.required' => 'Cpf é obrigatório!',
         ];
     }
 }

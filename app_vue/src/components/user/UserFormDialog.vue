@@ -48,6 +48,18 @@ const {
           </v-col>
           <v-col cols="12">
             <v-text-field
+              id="cpf"
+              name="cpf"
+              type="text"
+              variant="outlined"
+              label="CPF"
+              v-mask="['###.###.###-##']"
+              v-model="formData.cpf"
+              required/>
+            <error-label v-if="validate.cpf" :message="validate.cpf[0]" />
+          </v-col>
+          <v-col cols="12">
+            <v-text-field
               id="email"
               name="email"
               type="text"

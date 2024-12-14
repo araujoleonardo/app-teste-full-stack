@@ -18,7 +18,8 @@ class UserRepository implements UserRepositoryInterface
 
         if ($search) {
             $query->where('name', 'LIKE', '%' . $search . '%')
-                ->orWhere('email', 'LIKE', '%' . $search . '%');
+                ->orWhere('email', 'LIKE', '%' . $search . '%')
+                ->orWhere('cpf', 'LIKE', '%' . $search . '%');
         }
 
         if ($field && $direction) {
@@ -39,6 +40,7 @@ class UserRepository implements UserRepositoryInterface
             $user = new User();
             $user->name = $userDTO->name;
             $user->email = $userDTO->email;
+            $user->cpf = preg_replace('/[^0-9]/', '', $userDTO->cpf);
             $user->password = Hash::make($userDTO->password);
             $user->save();
 
@@ -58,6 +60,9 @@ class UserRepository implements UserRepositoryInterface
             $user->email = $userDTO->email;
             if (!empty($userDTO->password)) {
                 $user->password = Hash::make($userDTO->password);
+            }
+            if (!empty($userDTO->cpf)) {
+                $user->cpf = preg_replace('/[^0-9]/', '', $userDTO->cpf);
             }
             $user->update();
 

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Helper\GenerateCpf;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +20,7 @@ class DatabaseSeeder extends Seeder
         User::factory(20)->create();
 
         $user = [
-            ['name' => 'Suporte', 'email' => 'admin@teste.com', 'email_verified_at' => now(), 'password' => Hash::make('admin123'), 'remember_token' => Str::random(10),],
+            ['name' => 'Suporte', 'email' => 'admin@teste.com', 'cpf' => (new GenerateCpf)->generateCpf(), 'email_verified_at' => now(), 'password' => Hash::make('admin123'), 'remember_token' => Str::random(10),],
         ];
 
         foreach ($user as $row) {
