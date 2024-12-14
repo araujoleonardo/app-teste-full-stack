@@ -16,10 +16,10 @@ const {
   loading,
   validate,
   formData,
-  changePassword,
   handleSubmit,
   passwordGenerate,
-  open
+  open,
+  close
 } = useUserForm(props, emit);
 </script>
 
@@ -62,7 +62,7 @@ const {
               <v-col>
                 <v-btn
                   variant="outlined"
-                  :disabled="!changePassword"
+                  :disabled="!formData.change"
                   @click.prevent="passwordGenerate">
                   <font-awesome-icon :icon="['fas', 'rotate']" class="mr-1" />
                   Gerar senha
@@ -71,7 +71,7 @@ const {
               <v-col>
                 <v-switch
                   v-if="tipoForm === 'update'"
-                  v-model="changePassword"
+                  v-model="formData.change"
                   density="compact"
                   label="Alterar Senha?"
                   color="primary"/>
@@ -85,7 +85,7 @@ const {
               type="password"
               label="Senha"
               variant="outlined"
-              :disabled="!changePassword"
+              :disabled="!formData.change"
               v-model="formData.password"
               required/>
               <error-label v-if="validate.password" :message="validate.password[0]" />
@@ -97,7 +97,7 @@ const {
               type="password"
               label="Confirma Senha"
               variant="outlined"
-              :disabled="!changePassword"
+              :disabled="!formData.change"
               v-model="formData.password_confirmation"
               required/>
               <error-label v-if="validate.password_confirmation" :message="validate.password_confirmation[0]" />
@@ -110,7 +110,7 @@ const {
           text="Cancelar"
           variant="plain"
           :loading="loading"
-          @click="handleClose"
+          @click="close"
         ></v-btn>
 
         <v-btn

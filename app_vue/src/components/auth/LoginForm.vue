@@ -1,9 +1,7 @@
 <script setup>
-
 import {useAuthStore} from "@/stores/useAuth.js";
 
-const {login, form, loading} = useAuthStore();
-
+const {login, form} = useAuthStore();
 </script>
 
 <template>
@@ -12,22 +10,27 @@ const {login, form, loading} = useAuthStore();
       <v-card-title class="justify-center">Login</v-card-title>
       <v-card-text>
         <v-form ref="loginForm">
-          <v-text-field
-            id="email"
-            label="E-mail"
-            type="email"
-            v-model="form.email"
-            variant="outlined"
-            required
-          />
-          <v-text-field
-            id="password"
-            label="Senha"
-            type="password"
-            v-model="form.password"
-            variant="outlined"
-            required
-          />
+          <v-col cols="12">
+            <v-text-field
+              id="email"
+              name="email"
+              type="email"
+              variant="outlined"
+              label="Email"
+              v-model="form.email"
+              required/>
+          </v-col>
+
+          <v-col cols="12">
+            <v-text-field
+              id="password"
+              name="password"
+              type="password"
+              variant="outlined"
+              label="Senha"
+              v-model="form.password"
+              required/>
+          </v-col>
           <v-btn
             class="mt-4"
             color="primary"

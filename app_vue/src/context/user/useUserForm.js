@@ -1,13 +1,14 @@
 import {ref, reactive, watch} from 'vue';
 import generatePassword from "@/helpers/generatePassword.js";
 import apiAuth from "@/axios/useApiAuth.js";
+import {useToast} from "@/context/useToast.js";
 
 export default function useUserForm(props, emit) {
+  const { showToast } = useToast();
   const title = ref('Título');
   const btnTitulo = ref('Salvar');
   const urlSubmit = ref('');
   const loading = ref(false);
-  const changePassword = ref(false);
   const open = ref(false);
   const getPassword = ref(null);
   const validate = ref([]);
@@ -17,6 +18,7 @@ export default function useUserForm(props, emit) {
     email: null,
     password: null,
     password_confirmation: null,
+    change: false,
   });
 
   const resetForm = () => {
@@ -25,22 +27,23 @@ export default function useUserForm(props, emit) {
     formData.email = null;
     formData.password = null;
     formData.password_confirmation = null;
+    formData.change = true;
     validate.value = [];
-    changePassword.value = true;
   };
 
   const handleSubmit = () => {
     loading.value = true;
     apiAuth.post(urlSubmit.value, formData)
       .then(response => {
-        console.log(response?.data?.success || 'Dados cadastrados com sucesso!');
+        let message = response?.data?.success || 'Dados cadastrados com sucesso!';
+        showToast({message: message, color: 'success'});
         emit('reload');
         props.handleClose();
       })
       .catch(error => {
         validate.value = error.response.data.errors;
         if (!validate.value) {
-          console.log('Erro ao salvar, tente mais tarde!');
+          showToast({message: 'Erro ao salvar, tente mais tarde!', color: 'error'});
         }
       })
       .finally(() => {
@@ -56,6 +59,11 @@ export default function useUserForm(props, emit) {
     });
   }
 
+  const close = () => {
+    resetForm();
+    props.handleClose();
+  }
+
   watch(() => props.visible,
     (newVisible) => {
       open.value = newVisible;
@@ -69,13 +77,13 @@ export default function useUserForm(props, emit) {
           title.value = 'Editar Usuário';
           btnTitulo.value = 'Atualizar';
           urlSubmit.value = '/user-update';
-          changePassword.value = false;
           Object.assign(formData, {
             id: props.user.id,
             name: props.user.name,
             email: props.user.email,
             password: props.user.password,
             password_confirmation: props.user.password,
+            change: false,
           });
         }
       }
@@ -90,7 +98,7 @@ export default function useUserForm(props, emit) {
     validate,
     formData,
     open,
-    changePassword,
+    close,
     handleSubmit,
     passwordGenerate
   };

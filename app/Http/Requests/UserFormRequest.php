@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AuthFormRequest extends FormRequest
+class UserFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,10 @@ class AuthFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|min:3',
-            'email' => 'required|string|email|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'change' => 'nullable|boolean',
+            'name' => 'required|string|min:8',
+            'email' => 'required|string|email',
+            'password' => 'nullable|string|min:6|confirmed|required_if:change,true',
         ];
     }
 
@@ -32,18 +33,16 @@ class AuthFormRequest extends FormRequest
     {
         return [
             'name.required' => 'Nome é obrigatório!',
-            'name.min'      => 'Nome deve ter pelo menos 3 caracteres!',
-            'name.string'   => 'Nome precisa ser texto!',
+            'name.min' => 'Nome deve ter pelo menos 3 caracteres!',
+            'name.string' => 'Nome precisa ser texto!',
 
             'email.required'    => 'E-mail é obrigatório!',
             'email.string'      => 'E-mail inválido!',
             'email.email'       => 'E-mail não tem o formato desejado!',
-            'email.unique'      => 'E-mail já cadastrado!',
 
-            'password.required'     => 'Senha é obrigatória!',
-            'password.string'       => 'Formato de senha inválido!',
-            'password.min'          => 'Senha deve ter pelo menos 6 caracteres!',
-            'password.confirmed'    => 'Confirmação de senha não confere!',
+            'password.required_if' => 'Senha é obrigatória!',
+            'password.min' => 'Senha deve ter pelo menos 6 caracteres!',
+            'password.confirmed' => 'A confirmação da senha não confere!',
         ];
     }
 }

@@ -4,16 +4,18 @@ namespace App\DTO;
 
 class UserDTO
 {
-    public string $id;
-    public string $name;
-    public string $email;
-    public ?string $profile_photo_path;
+    public ?int $id;
+    public ?string $name;
+    public ?string $email;
+    public ?string $password;
+    public ?bool $change;
 
     public function __construct(array $data)
     {
         $this->id = $data['id'] ?? null;
-        $this->name = $data['name'];
-        $this->email = $data['email'];
-        $this->profile_photo_path = $data['profile_photo_path'] ?? null;
+        $this->name = $data['name'] ?? null;
+        $this->email = $data['email'] ?? null;
+        $this->password = $data['password'] ?? null;
+        $this->change = $data['change'] ?? null;
     }
 }

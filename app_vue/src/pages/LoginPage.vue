@@ -13,7 +13,7 @@ onMounted(() => {
   user.value = checkUser();
 
   if (user.value) {
-    router.push('/usuarios');
+    router.push('/');
   }
 });
 </script>

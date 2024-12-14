@@ -1,27 +1,67 @@
-<v-dialog max-width="500">
-  <template v-slot:activator="{ props: activatorProps }">
-    <v-btn
-      v-bind="activatorProps"
-      color="surface-variant"
-      text="Open Dialog"
-      variant="flat"
-    ></v-btn>
-  </template>
+<script setup>
+import useUserShow from "@/context/user/useUserShow.js";
 
-  <template v-slot:default="{ isActive }">
-    <v-card title="Dialog">
-      <v-card-text>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-      </v-card-text>
+const props = defineProps({
+  id: { type: Number, default: null },
+  visible: { type: Boolean },
+  handleClose: { type: Function },
+});
 
+const {
+  showData,
+  loading,
+  open
+} = useUserShow(props);
+</script>
+
+<template>
+  <v-dialog
+    v-model="open"
+    width="auto"
+  >
+    <v-card width="400">
+      <v-list density="compact">
+        <v-list-subheader>Dados do Usuário</v-list-subheader>
+
+        <v-list-item
+          color="primary"
+        >
+          <template v-slot:prepend>
+            <v-icon><font-awesome-icon :icon="['fas', 'user']" /></v-icon>
+          </template>
+
+          <v-list-item-title v-text="showData?.name"></v-list-item-title>
+        </v-list-item>
+
+        <v-list-item
+          color="primary"
+        >
+          <template v-slot:prepend>
+            <v-icon><font-awesome-icon :icon="['fas', 'at']" /></v-icon>
+          </template>
+
+          <v-list-item-title v-text="showData?.email"></v-list-item-title>
+        </v-list-item>
+
+        <v-list-item
+          color="primary"
+        >
+          <template v-slot:prepend>
+            <v-icon><font-awesome-icon :icon="['fas', 'calendar-plus']" /></v-icon>
+          </template>
+
+          <v-list-item-title v-text="showData?.created_at"></v-list-item-title>
+        </v-list-item>
+      </v-list>
+      <v-divider></v-divider>
       <v-card-actions>
-        <v-spacer></v-spacer>
-
         <v-btn
-          text="Close Dialog"
-          @click="isActive.value = false"
+          text="Fechar"
+          variant="plain"
+          :loading="loading"
+          @click="handleClose"
         ></v-btn>
       </v-card-actions>
     </v-card>
-  </template>
-</v-dialog>
+  </v-dialog>
+</template>

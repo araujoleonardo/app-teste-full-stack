@@ -1,7 +1,11 @@
 import { ref, reactive, onMounted } from 'vue';
 import apiAuth from "@/axios/useApiAuth.js";
+import {useToast} from "@/context/useToast.js";
+import {useConfirmDialog} from "@/context/useConfirmDialog.js";
 
 export default function useUserTable(baseEndpoint) {
+  const { showToast } = useToast();
+  const { open } = useConfirmDialog();
   const loading = ref(false);
   const baseUrl = ref(baseEndpoint+'?page=1');
   const currentPage = ref(null);
@@ -25,7 +29,7 @@ export default function useUserTable(baseEndpoint) {
         dataSet.data = response.data.users.data;
       })
       .catch((error) => {
-        console.log('erro ao carregar dados')
+        showToast({message: 'Erro ao carregar dados!', color: 'error'});
       })
       .finally(() => {
         loading.value = false;
@@ -52,28 +56,22 @@ export default function useUserTable(baseEndpoint) {
     }
   };
 
-  const handleDelete = (row) => {
-    showConfirm({
+  const handleDelete = async (row) => {
+
+    const confirmed = await open({
       title: 'Atenção',
-      message: 'Esta ação não poderá ser desfeita. Continuar?',
-      button: {
-        yes: 'Sim',
-        no: 'Cancelar',
-      },
-      callback: (confirm) => {
-        if (!confirm) {
-          return;
-        }
-
-        apiAuth.delete('/user-delete/'+ row.id).then((response) => {
-          console.log(response?.data?.success || 'Item excluido com sucesso!');
-          getData(baseUrl.value);
-        }).catch((error) => {
-          console.log(error?.response?.data?.error || 'Não foi possível excluir item!');
-        });
-
-      },
+      message: 'Você tem certeza que deseja excluir o registro?',
     });
+    if (confirmed) {
+      apiAuth.delete('/user-delete/'+ row.id).then((response) => {
+        let message = response?.data?.success || 'Usuário excluido com sucesso!';
+        showToast({message: message, color: 'success'});
+        getData(baseUrl.value);
+      }).catch((error) => {
+        let message = error?.response?.data?.error || 'Não foi possível excluir usuário!';
+        showToast({message: message, color: 'error'});
+      });
+    }
   };
 
   onMounted(() => {

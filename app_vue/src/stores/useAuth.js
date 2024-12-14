@@ -3,11 +3,12 @@ import { defineStore } from 'pinia';
 import api from "@/axios/useApi.js";
 import router from "@/router/index.js";
 import apiAuth from "@/axios/useApiAuth.js";
+import {useToast} from "@/context/useToast.js";
 
 export const useAuthStore = defineStore('auth', () => {
+  const { showToast } = useToast();
   const token = ref(sessionStorage.getItem('token'));
   const user = ref(JSON.parse(sessionStorage.getItem('user')));
-  const loading = ref(false);
   const form = reactive({
     email: '',
     password: ''
@@ -24,18 +25,14 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const login = () => {
-    loading.value = true;
-
     api.post('/login', form)
       .then((response) => {
         setToken(response.data.token);
         setUser(response.data.user);
-        console.log('Login feito com sucesso!');
-        router.push({name: 'usuarios'});
+        showToast({message: 'Login feito com sucesso!', color: 'success'});
+        router.push('/');
       }).catch((error) => {
-        console.log(error)
-      }).finally(() => {
-        loading.value = false;
+        showToast({message: 'Erro nas credencias, tente novamente!', color: 'error'});
       });
   }
 
@@ -84,7 +81,7 @@ export const useAuthStore = defineStore('auth', () => {
 
       window.location.reload();
 
-      router.push({ name: 'login' });
+      router.push('/login');
     }).catch ((error) => {
       console.error('Erro no logout:', error?.response?.data || error.message);
     });
@@ -93,7 +90,6 @@ export const useAuthStore = defineStore('auth', () => {
   return {
     login,
     form,
-    loading,
     token,
     user,
     checkToken,

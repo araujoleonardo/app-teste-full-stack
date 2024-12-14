@@ -13,11 +13,11 @@ const router = createRouter({
       component: LoginPage,
     },
     {
-      path: '/usuarios',
+      path: '/',
       component: AppLayout,
       children: [
         {
-          path: '/usuarios',
+          path: '/',
           name: 'usuarios',
           component: UsuarioPage,
           meta: { requiresAuth: true }

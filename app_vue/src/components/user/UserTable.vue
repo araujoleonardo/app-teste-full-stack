@@ -3,6 +3,8 @@ import useUserTable from "@/context/user/useUserTable.js";
 import {ref} from "vue";
 import AppPagination from "@/components/utilitarios/AppPagination.vue";
 import UserFormDialog from "@/components/user/UserFormDialog.vue";
+import AppToast from "@/components/utilitarios/AppToast.vue";
+import UserShowDialog from "@/components/user/UserShowDialog.vue";
 
 const {
   loading,
@@ -15,7 +17,7 @@ const {
   handleDelete
 } = useUserTable('/users');
 const openDialog = ref({ isOpen: false, tipoForm: 'novo' });
-//const openShow = ref({ isOpen: false, id: null });
+const openShow = ref({ isOpen: false, id: null });
 const user = ref({});
 
 const handleOpen = () => {
@@ -28,11 +30,17 @@ const handleEdit = (row) => {
   user.value = row;
   openDialog.value.isOpen = true;
 };
+
+const handleShow = (data) => {
+  openShow.value.id = data.id;
+  openShow.value.isOpen = true;
+};
 </script>
 
 <template>
   <div>
     <v-card>
+      <AppToast/>
       <v-card-title>
         <v-row align="center" justify="space-between">
           <v-col cols="auto">
@@ -103,7 +111,7 @@ const handleEdit = (row) => {
                   </v-btn>
                 </v-col>
                 <v-col cols="auto">
-                  <v-btn density="compact" color="green-darken-2" variant="text" icon>
+                  <v-btn density="compact" color="green-darken-2" variant="text" icon @click="handleShow(user)">
                     <font-awesome-icon size="lg" :icon="['fas', 'file-lines']" />
                   </v-btn>
                 </v-col>
@@ -141,6 +149,16 @@ const handleEdit = (row) => {
       :tipoForm="openDialog.tipoForm"
       :user="user"
       @reload="loadData"
+    />
+
+    <UserShowDialog
+      :visible="openShow.isOpen"
+      :handleClose="
+        () => {
+          openShow.isOpen = false
+        }
+      "
+      :id="openShow.id"
     />
   </div>
 </template>

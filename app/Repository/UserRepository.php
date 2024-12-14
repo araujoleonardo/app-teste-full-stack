@@ -6,6 +6,7 @@ use App\DTO\UserDTO;
 use App\Repository\Interfaces\UserRepositoryInterface;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 class UserRepository implements UserRepositoryInterface
@@ -16,7 +17,8 @@ class UserRepository implements UserRepositoryInterface
         $query = User::whereNot('id', auth()->id());
 
         if ($search) {
-            $query->where('name', 'LIKE', '%' . $search . '%');
+            $query->where('name', 'LIKE', '%' . $search . '%')
+                ->orWhere('email', 'LIKE', '%' . $search . '%');
         }
 
         if ($field && $direction) {
@@ -28,7 +30,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function findById(int $id)
     {
-        return User::where('id', $id)->with('profile')->first();
+        return User::findOrFail($id);
     }
 
     public function store(UserDTO $userDTO): bool
@@ -37,6 +39,7 @@ class UserRepository implements UserRepositoryInterface
             $user = new User();
             $user->name = $userDTO->name;
             $user->email = $userDTO->email;
+            $user->password = Hash::make($userDTO->password);
             $user->save();
 
             return true;
@@ -53,6 +56,9 @@ class UserRepository implements UserRepositoryInterface
 
             $user->name = $userDTO->name;
             $user->email = $userDTO->email;
+            if (!empty($userDTO->password)) {
+                $user->password = Hash::make($userDTO->password);
+            }
             $user->update();
 
             return true;
