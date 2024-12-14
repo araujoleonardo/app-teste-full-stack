@@ -84,9 +84,9 @@ class AuthController extends Controller
         }
     }
 
-    public function logout(Request $request): JsonResponse
+    public function logout(): JsonResponse
     {
-        $user = User::findOrFail($request->user_id);
+        $user = User::findOrFail(auth('sanctum')->user()->id);
 
         $user->tokens()->delete();
 
