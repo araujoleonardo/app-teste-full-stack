@@ -1,4 +1,4 @@
-import {useAuthStore} from "../stores/useAuth.js";
+import {useAuthStore} from "@/stores/useAuth.js";
 import {useRouter} from "vue-router";
 
 export default async function routes(to, from, next) {

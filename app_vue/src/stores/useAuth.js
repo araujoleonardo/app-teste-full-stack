@@ -1,7 +1,8 @@
 import {reactive, ref} from 'vue';
 import { defineStore } from 'pinia';
-import api from "../axios/useApi.js";
-import router from "../router/index.js";
+import api from "@/axios/useApi.js";
+import router from "@/router/index.js";
+import apiAuth from "@/axios/useApiAuth.js";
 
 export const useAuthStore = defineStore('auth', () => {
   const token = ref(sessionStorage.getItem('token'));
@@ -78,7 +79,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function logout() {
-    api.post('/logout').then(() => {
+    apiAuth.post('/logout').then(() => {
       clear();
 
       window.location.reload();
