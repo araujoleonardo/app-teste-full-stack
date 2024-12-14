@@ -37,6 +37,16 @@ const {
           color="primary"
         >
           <template v-slot:prepend>
+            <v-icon><font-awesome-icon :icon="['fas', 'id-card']" /></v-icon>
+          </template>
+
+          <v-list-item-title v-text="showData?.cpf"></v-list-item-title>
+        </v-list-item>
+
+        <v-list-item
+          color="primary"
+        >
+          <template v-slot:prepend>
             <v-icon><font-awesome-icon :icon="['fas', 'at']" /></v-icon>
           </template>
 

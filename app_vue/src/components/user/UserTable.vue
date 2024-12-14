@@ -81,6 +81,12 @@ const handleShow = (data) => {
               </v-btn>
             </th>
             <th class="text-left">
+              CPF
+              <v-btn density="compact" variant="plain" @click="handleSort('cpf')" size="small">
+                <font-awesome-icon :icon="['fas', 'sort']" />
+              </v-btn>
+            </th>
+            <th class="text-left">
               Criado em
               <v-btn density="compact" variant="plain" @click="handleSort('created_at')" size="small">
                 <font-awesome-icon :icon="['fas', 'sort']" />
@@ -101,6 +107,7 @@ const handleShow = (data) => {
           <tr v-for="(user) in dataSet.data" :key="user.id">
             <td>{{ user.name }}</td>
             <td>{{ user.email }}</td>
+            <td>{{ user.cpf }}</td>
             <td>{{ user.created_at }}</td>
             <td>{{ user.updated_at }}</td>
             <td class="justify-space-between">

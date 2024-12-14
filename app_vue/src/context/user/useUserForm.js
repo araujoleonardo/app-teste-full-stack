@@ -16,6 +16,7 @@ export default function useUserForm(props, emit) {
     id: null,
     name: null,
     email: null,
+    cpf: null,
     password: null,
     password_confirmation: null,
     change: false,
@@ -25,6 +26,7 @@ export default function useUserForm(props, emit) {
     formData.id = null;
     formData.name = null;
     formData.email = null;
+    formData.cpf = null;
     formData.password = null;
     formData.password_confirmation = null;
     formData.change = true;
@@ -81,6 +83,7 @@ export default function useUserForm(props, emit) {
             id: props.user.id,
             name: props.user.name,
             email: props.user.email,
+            cpf: props.user.cpf,
             password: props.user.password,
             password_confirmation: props.user.password,
             change: false,

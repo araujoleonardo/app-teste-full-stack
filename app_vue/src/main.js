@@ -7,6 +7,7 @@ import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
+import VueTheMask from 'vue-the-mask';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -23,6 +24,7 @@ const vuetify = createVuetify({
 
 app.use(router)
 app.use(vuetify)
+app.use(VueTheMask)
 app.use(createPinia())
 app.component('font-awesome-icon', FontAwesomeIcon);
 
